@@ -1,0 +1,156 @@
+package levi.calcolatrice.controller;
+
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.VBox;
+import levi.calcolatrice.model.Espressione;
+import levi.calcolatrice.model.ExpressionException;
+import levi.calcolatrice.model.Operatore;
+import levi.calcolatrice.model.Parentesi;
+
+import java.util.ArrayList;
+
+public class MainController {
+    @FXML
+    public Label operazione;
+    @FXML
+    public Button b0;
+    public Button b1;
+    public Button b2;
+    public Button b3;
+    public Button b4;
+    public Button b5;
+    public Button b6;
+    public Button b7;
+    public Button b8;
+    public Button b9;
+    public Button eq;
+    public Button addiz;
+    public Button sott;
+    public Button molt;
+    public Button div;
+    public Button back;
+    public Button clearBtn;
+    public Button pow;
+    public VBox calcolatrice;
+
+    private ArrayList<String> dati = new ArrayList<>();
+
+    public void initialize(){
+        dati.add("");
+        operazione.setText("");
+        back.setDisable(true);
+    }
+
+    public void modifica(ActionEvent actionEvent) throws ExpressionException {
+        String n = ((Button)actionEvent.getSource()).getText();
+
+        switch(dati.getLast()){
+            case "+", "-", "*", "/", "", "^", "(":
+                if(n.equals("+") || n.equals("-") || n.equals("*") || n.equals("/") || n.equals("^") || n.equals(")")){
+                    break;
+                }
+                dati.add(n);
+                break;
+            case "=":
+                risolvi();
+            default:
+                dati.add(n);
+                break;
+        }
+        aggiorna();
+    }
+
+    public void risolvi() throws ExpressionException {
+        String s = "";
+        for(int i = 0; i < dati.size(); i++){
+            s += dati.get(i);
+        }
+        Espressione e = new Espressione(s);
+        e.scanner();
+        e.shuntingYards();
+        operazione.setText(e.risolvi().toString());
+    }
+
+    public void indietro(){
+        dati.removeLast();
+        aggiorna();
+    }
+
+    public void cancella(){
+        dati.clear();
+        dati.add("");
+        aggiorna();
+    }
+
+    public void aggiorna(){
+        String s = "";
+        for(String n : dati){
+            s += n;
+        }
+        operazione.setText(s);
+        if(dati.size() > 1){
+            back.setDisable(false);
+        }else{
+            back.setDisable(true);
+        }
+
+    }
+
+    public void tastiera(KeyEvent keyEvent) throws ExpressionException {
+        KeyCode c = keyEvent.getCode();
+
+        if(keyEvent.isShiftDown() && c == KeyCode.DIGIT7){
+            dati.add(Operatore.DIV.toString());
+            aggiorna();
+            return;
+        }
+        if(keyEvent.isShiftDown() && c == KeyCode.DIGIT8){
+            dati.add(Parentesi.PARENTESI_APERTA.toString());
+            aggiorna();
+            return;
+        }
+        if(keyEvent.isShiftDown() && c == KeyCode.DIGIT9){
+            dati.add(Parentesi.PARENTESI_CHIUSA.toString());
+            aggiorna();
+            return;
+        }
+        if(keyEvent.isShiftDown() && c == KeyCode.PLUS){
+            dati.add(Operatore.MULT.toString());
+            aggiorna();
+            return;
+        }
+        if(keyEvent.isShiftDown() && keyEvent.getText().equals("ì")){
+            dati.add(Operatore.POW.toString());
+            aggiorna();
+            return;
+        }
+
+        switch(c){
+            case DIGIT0, DIGIT1, DIGIT2, DIGIT3, DIGIT4, DIGIT5, DIGIT6, DIGIT7, DIGIT8, DIGIT9:
+                dati.add(keyEvent.getText());
+                aggiorna();
+                break;
+            case MINUS:
+                dati.add(Operatore.SUB.toString());
+                aggiorna();
+                break;
+            case PLUS:
+                dati.add(Operatore.ADD.toString());
+                aggiorna();
+                break;
+            case KeyCode.BACK_SPACE:
+                indietro();
+                break;
+            case KeyCode.ENTER:
+                risolvi();
+                break;
+            default:
+                break;
+        }
+    }
+}
