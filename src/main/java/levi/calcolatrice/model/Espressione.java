@@ -23,42 +23,63 @@ public class Espressione {
         for (char carattere : inputExpr.toCharArray()) {
             switch (carattere) {
                 case '(':
-                    tokensList.add(Parentesi.PARENTESI_APERTA);
-                    if(controlloNum(numero, inLetturaNumero))
+                    if (inLetturaNumero){
+                        tokensList.add(new Frazione(numero, 1));
                         inLetturaNumero = false;
+                        numero = 0;
+                    }
+                    tokensList.add(Parentesi.PARENTESI_APERTA);
                     break;
                 case ')':
-                    tokensList.add(Parentesi.PARENTESI_CHIUSA);
-                    if(controlloNum(numero, inLetturaNumero))
+                    if (inLetturaNumero){
+                        tokensList.add(new Frazione(numero, 1));
                         inLetturaNumero = false;
+                        numero = 0;
+                    }
+                    tokensList.add(Parentesi.PARENTESI_CHIUSA);
                     break;
                 case '+':
-                    tokensList.add(Operatore.ADD);
-                    if(controlloNum(numero, inLetturaNumero))
+                    if (inLetturaNumero){
+                        tokensList.add(new Frazione(numero, 1));
                         inLetturaNumero = false;
+                        numero = 0;
+                    }
+                    tokensList.add(Operatore.ADD);
                     break;
                 case '-':
-                    tokensList.add(Operatore.SUB);
-                    if(controlloNum(numero, inLetturaNumero))
+                    if (inLetturaNumero){
+                        tokensList.add(new Frazione(numero, 1));
                         inLetturaNumero = false;
+                        numero = 0;
+                    }
+                    tokensList.add(Operatore.SUB);
                     break;
                 case '*':
-                    tokensList.add(Operatore.MULT);
-                    if(controlloNum(numero, inLetturaNumero))
+                    if (inLetturaNumero){
+                        tokensList.add(new Frazione(numero, 1));
                         inLetturaNumero = false;
+                        numero = 0;
+                    }
+                    tokensList.add(Operatore.MULT);
                     break;
                 case '/':
-                    tokensList.add(Operatore.DIV);
-                    if(controlloNum(numero, inLetturaNumero))
+                    if (inLetturaNumero){
+                        tokensList.add(new Frazione(numero, 1));
                         inLetturaNumero = false;
+                        numero = 0;
+                    }
+                    tokensList.add(Operatore.DIV);
                     break;
                 case '^':
-                    tokensList.add(Operatore.POW);
-                    if(controlloNum(numero, inLetturaNumero))
+                    if (inLetturaNumero){
+                        tokensList.add(new Frazione(numero, 1));
                         inLetturaNumero = false;
+                        numero = 0;
+                    }
+                    tokensList.add(Operatore.POW);
                     break;
                 case '0', '1', '2', '3', '4', '5', '6', '7', '8', '9':
-                    numero = (numero * 10) + Long.valueOf(Character.toString(carattere));
+                    numero = (numero * 10) + Long.parseLong(Character.toString(carattere));
                     inLetturaNumero = true;
                     break;
                 default:
@@ -66,18 +87,13 @@ public class Espressione {
 
             }
         }
-    }
-
-    public boolean controlloNum(long n, boolean inLettura){
-        if(inLettura){
-            tokensList.add(new Frazione(n, 1));
-            return true;
+        if (inLetturaNumero){
+            tokensList.add(new Frazione(numero, 1));
         }
-        return false;
     }
 
     public void shuntingYards() throws ExpressionException {
-
+        scanner();
         for(Object token : tokensList){
             if(token instanceof Frazione){
                 output.add(token);
@@ -109,8 +125,8 @@ public class Espressione {
         rpn = output;
     }
 
-    public Frazione risolvi() throws ExpressionException {
-
+    public Frazione risultato() throws ExpressionException {
+        shuntingYards();
         Stack<Frazione> output = new Stack<>();
         for(Object o : rpn){
             if(o instanceof Frazione){
@@ -118,19 +134,21 @@ public class Espressione {
             }else{
                 try{
                     Frazione n2 = output.pop();
+                    Frazione n1 = output.pop();
                     switch ((Operatore)o){
-                        case ADD ->  output.push(output.pop()).add(n2);
-                        case SUB -> output.push(output.pop()).sott(n2);
-                        case MULT -> output.push(output.pop()).mult(n2);
-                        case DIV -> output.push(output.pop()).div(n2);
-                        case POW -> output.push(output.pop()).pow(n2);
+                        case ADD ->  output.push(n1.add(n2));
+                        case SUB -> output.push(n1.sott(n2));
+                        case MULT -> output.push(n1.mult(n2));
+                        case DIV -> output.push(n1.div(n2));
+                        case POW -> output.push(n1.pow(n2));
                     }
-                }catch (EmptyStackException ex){
-                    throw new ExpressionException(ex.getMessage());
+                }catch (EmptyStackException e){
+                    throw new ExpressionException("syntax error");
                 }
             }
         }
         Frazione risultato = output.pop();
+        System.out.println(risultato);
         return risultato;
     }
 

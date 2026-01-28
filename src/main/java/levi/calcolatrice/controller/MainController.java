@@ -71,9 +71,7 @@ public class MainController {
             s += dati.get(i);
         }
         Espressione e = new Espressione(s);
-        e.scanner();
-        e.shuntingYards();
-        operazione.setText(e.risolvi().toString());
+        operazione.setText(e.risultato().toString());
     }
 
     public void indietro(){
@@ -84,6 +82,7 @@ public class MainController {
     public void cancella(){
         dati.clear();
         dati.add("");
+        operazione.setText("");
         aggiorna();
     }
 
