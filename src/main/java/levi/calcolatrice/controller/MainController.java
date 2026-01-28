@@ -142,14 +142,14 @@ public class MainController {
                 dati.add(Operatore.ADD.toString());
                 aggiorna();
                 break;
-            case KeyCode.BACK_SPACE:
+            case BACK_SPACE:
                 indietro();
                 break;
-            case KeyCode.ENTER:
+            case ENTER:
                 risolvi();
                 break;
             default:
-                break;
+                throw new ExpressionException("pulsante non valido");
         }
     }
 }

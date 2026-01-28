@@ -48,6 +48,11 @@ public class Frazione {
         return a;
     }
 
+    private static long minimoComuneMultiplo(long n1, long n2){
+        long mcd = massimoComuneDivisore(n1, n2);
+        return (n1*n2)/mcd;
+    }
+
     /**
      * Moltiplicazione
      * @param f secondo operando
@@ -61,13 +66,13 @@ public class Frazione {
     }
     public Frazione add(Frazione f){
         long num, den;
-        den = massimoComuneDivisore(this.denominatore, f.denominatore);
+        den = minimoComuneMultiplo(this.denominatore, f.denominatore);
         num = den / this.denominatore * this.numeratore + den / f.denominatore * f.numeratore;
         return new Frazione(num, den);
     }
     public Frazione sott(Frazione f){
         long num, den;
-        den = massimoComuneDivisore(this.denominatore, f.denominatore);
+        den = minimoComuneMultiplo(this.denominatore, f.denominatore);
         num = den / this.denominatore * this.numeratore - den / f.denominatore * f.numeratore;
         return new Frazione(num, den);
     }
