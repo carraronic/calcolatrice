@@ -9,6 +9,7 @@ import javafx.stage.Screen;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.Objects;
 
 public class MainApplication extends Application {
     @Override
@@ -20,7 +21,7 @@ public class MainApplication extends Application {
         double h = screenBound.getHeight();
 
         Scene scene = new Scene(fxmlLoader.load(), w*0.9, h*0.9);
-        stage.getIcons().add(new Image(MainApplication.class.getResource("imgs/calc.png").toExternalForm()));
+        stage.getIcons().add(new Image(Objects.requireNonNull(MainApplication.class.getResource("imgs/calc.png")).toExternalForm()));
 
         stage.setTitle("Calcolatrice");
         stage.setScene(scene);
