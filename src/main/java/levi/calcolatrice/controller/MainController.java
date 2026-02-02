@@ -72,6 +72,8 @@ public class MainController {
         }
         Espressione e = new Espressione(s);
         operazione.setText(e.risultato().toString());
+        dati.clear();
+        dati.add(operazione.getText());
     }
 
     public void indietro(){
@@ -102,7 +104,6 @@ public class MainController {
 
     public void tastiera(KeyEvent keyEvent) throws ExpressionException {
         KeyCode c = keyEvent.getCode();
-        System.out.println(c);
 
         if(keyEvent.isShiftDown() && c == KeyCode.DIGIT7){
             dati.add(Operatore.DIV.toString());

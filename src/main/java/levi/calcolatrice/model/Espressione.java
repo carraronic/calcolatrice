@@ -7,6 +7,7 @@ import java.util.Stack;
 public class Espressione {
     private String inputExpr;
     ArrayList<Object> tokensList;
+    ArrayList<Object> validTokensList;
     private ArrayList<Object> rpn;
 
     ArrayList<Object> output = new ArrayList<>();
@@ -14,6 +15,7 @@ public class Espressione {
 
     public Espressione(String inputExpr) {
         tokensList = new ArrayList<>();
+        validTokensList = new ArrayList<>();
         this.inputExpr = inputExpr;
     }
 
@@ -47,7 +49,7 @@ public class Espressione {
                     tokensList.add(Operatore.ADD);
                     break;
                 case '-':
-                    if (inLetturaNumero){
+                    if (inLetturaNumero) {
                         tokensList.add(new Frazione(numero, 1));
                         inLetturaNumero = false;
                         numero = 0;
@@ -92,8 +94,84 @@ public class Espressione {
         }
     }
 
-    public void shuntingYards() throws ExpressionException {
+    public void parser() throws ExpressionException {
+        /*
+            stato = 0: in attesa di espressione
+            stato = 1: letto Operatore
+            stato = 2: letto Operando (Frazione)
+            stato = 3: letta Parentesi Chiusa
+         */
         scanner();
+        int stato = 0;
+        for (Object token : tokensList) {
+            switch (stato) {
+                case 0:
+                    /*-- stato 0 ----- in attesa di espressione -------------------------------*/
+                    if (token instanceof Operatore) {
+                        if(!token.equals("+") && !token.equals("-")){
+                            throw new ExpressionException("Espressione non valida");
+                        }
+                        validTokensList.add(token);
+                        stato = 1;
+                    } else if (token instanceof Parentesi) {
+                        if(token.equals(Parentesi.PARENTESI_CHIUSA)){
+                            throw new ExpressionException("Espressione non valida");
+                        }
+                    } else if (token instanceof Frazione) {
+                        validTokensList.add(token);
+                        stato = 2;
+                    }
+
+                    break;
+                case 1:
+                    /*-- stato 1 ----- letto Operatore -----------------------------*/
+                    if (token instanceof Operatore) {
+                        throw new ExpressionException("Espressione non valida");
+                    } else if (token instanceof Frazione) {
+                        validTokensList.add(token);
+                        stato = 2;
+                    } else if (token instanceof Parentesi) {
+                        if(token.equals(Parentesi.PARENTESI_CHIUSA)){
+                            throw new ExpressionException("Espressione non valida");
+                        }
+                        validTokensList.add(token);
+                        stato = 0;
+                    }
+                    break;
+                case 2:
+                    /*-- stato 2 ----- letto Operando (Frazione) -----------------------------------------*/
+                    if (token instanceof Operatore) {
+                        validTokensList.add(token);
+                        stato = 1;
+                    } else if (token instanceof Frazione) {
+                        throw new ExpressionException("Espressione non valida");
+                    } else if (token instanceof Parentesi) {
+                        if(token.equals(Parentesi.PARENTESI_APERTA)){
+                            throw new ExpressionException("Espressione non valida");
+                        }
+                        validTokensList.add(token);
+                        stato = 3;
+                    }
+                    break;
+                case 3:
+                    /*-- stato 3 ----- letta Parentesi Chiusa ---------------------------------------------*/
+                    if (token instanceof Operatore) {
+                        validTokensList.add(token);
+                        stato = 1;
+                    } else if (token instanceof Frazione) {
+                        throw new ExpressionException("Espressione non valida");
+                    } else if (token instanceof Parentesi) {
+                        throw new ExpressionException("Espressione non valida");
+                    }
+            }
+        }
+        //non deve terminare con un operatore (stato 1)
+        if (stato == 1)
+            throw new ExpressionException("Espressione non valida");
+    }
+
+    public void shuntingYards() throws ExpressionException {
+        parser();
         for(Object token : tokensList){
             if(token instanceof Frazione){
                 output.add(token);
