@@ -61,15 +61,18 @@ public class Frazione {
     public Frazione mult(Frazione f){
         return new Frazione(this.numeratore * f.numeratore, this.denominatore * f.denominatore);
     }
+
     public Frazione div(Frazione f){
         return this.mult(new Frazione(f.denominatore, f.numeratore));
     }
+
     public Frazione add(Frazione f){
         long num, den;
         den = minimoComuneMultiplo(this.denominatore, f.denominatore);
         num = den / this.denominatore * this.numeratore + den / f.denominatore * f.numeratore;
         return new Frazione(num, den);
     }
+
     public Frazione sott(Frazione f){
         long num, den;
         den = minimoComuneMultiplo(this.denominatore, f.denominatore);
