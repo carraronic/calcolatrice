@@ -102,6 +102,7 @@ public class MainController {
 
     public void tastiera(KeyEvent keyEvent) throws ExpressionException {
         KeyCode c = keyEvent.getCode();
+        System.out.println(c);
 
         if(keyEvent.isShiftDown() && c == KeyCode.DIGIT7){
             dati.add(Operatore.DIV.toString());
@@ -128,6 +129,10 @@ public class MainController {
             aggiorna();
             return;
         }
+        if(keyEvent.isShiftDown() && keyEvent.getText().equals("0")){
+            risolvi();
+            return;
+        }
 
         switch(c){
             case DIGIT0, DIGIT1, DIGIT2, DIGIT3, DIGIT4, DIGIT5, DIGIT6, DIGIT7, DIGIT8, DIGIT9:
@@ -145,11 +150,8 @@ public class MainController {
             case BACK_SPACE:
                 indietro();
                 break;
-            case ENTER:
-                risolvi();
-                break;
             default:
-                throw new ExpressionException("pulsante non valido");
+                break;
         }
     }
 }
