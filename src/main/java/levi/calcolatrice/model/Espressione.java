@@ -92,6 +92,7 @@ public class Espressione {
         if (inLetturaNumero){
             tokensList.add(new Frazione(numero, 1));
         }
+        System.out.println(tokensList);
     }
 
     public void parser() throws ExpressionException {
@@ -103,21 +104,36 @@ public class Espressione {
          */
         scanner();
         int stato = 0;
+        boolean operatoreUsato = false;
         for (Object token : tokensList) {
             switch (stato) {
                 case 0:
                     /*-- stato 0 ----- in attesa di espressione -------------------------------*/
                     if (token instanceof Operatore) {
-                        if(!token.equals("+") && !token.equals("-")){
-                            throw new ExpressionException("Espressione non valida");
+                        if (operatoreUsato){
+                            throw new ExpressionException("espressione non valida");
                         }
-                        validTokensList.add(token);
+                        switch ((Operatore)token){
+                            case ADD:
+                                operatoreUsato = true;
+                                break;
+                            case SUB:
+                                operatoreUsato = true;
+                                validTokensList.add(new Frazione(-1,1));
+                                validTokensList.add(Operatore.MULT);
+                                break;
+                            default:
+                                throw new ExpressionException("espressione non valida");
+
+                        }
                         stato = 1;
                     } else if (token instanceof Parentesi) {
                         if(token.equals(Parentesi.PARENTESI_CHIUSA)){
+                            operatoreUsato = false;
                             throw new ExpressionException("Espressione non valida");
                         }
                     } else if (token instanceof Frazione) {
+                        operatoreUsato = false;
                         validTokensList.add(token);
                         stato = 2;
                     }
@@ -126,12 +142,21 @@ public class Espressione {
                 case 1:
                     /*-- stato 1 ----- letto Operatore -----------------------------*/
                     if (token instanceof Operatore) {
+                        if((token.equals(Operatore.ADD) || token.equals(Operatore.SUB)) && !operatoreUsato && ((Operatore)tokensList.getLast()).getPriority()==2){
+                            operatoreUsato = true;
+                            if(token.equals(Operatore.SUB)){
+                                validTokensList.add(new Frazione(-1,1));
+                                validTokensList.add(Operatore.MULT);
+                            }
+                        }
                         throw new ExpressionException("Espressione non valida");
                     } else if (token instanceof Frazione) {
                         validTokensList.add(token);
                         stato = 2;
+                        operatoreUsato = false;
                     } else if (token instanceof Parentesi) {
                         if(token.equals(Parentesi.PARENTESI_CHIUSA)){
+                            operatoreUsato = false;
                             throw new ExpressionException("Espressione non valida");
                         }
                         validTokensList.add(token);
@@ -165,14 +190,14 @@ public class Espressione {
                     }
             }
         }
-        //non deve terminare con un operatore (stato 1)
+        //non deve terminare con un operatoreUsato (stato 1)
         if (stato == 1)
             throw new ExpressionException("Espressione non valida");
     }
 
     public void shuntingYards() throws ExpressionException {
         parser();
-        for(Object token : tokensList){
+        for(Object token : validTokensList){
             if(token instanceof Frazione){
                 output.add(token);
             }else if(token instanceof Operatore){
@@ -201,6 +226,7 @@ public class Espressione {
             }
         }
         rpn = output;
+        System.out.println(rpn);
     }
 
     public Frazione risultato() throws ExpressionException {
