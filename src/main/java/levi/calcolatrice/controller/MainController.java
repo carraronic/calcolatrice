@@ -65,15 +65,19 @@ public class MainController {
         aggiorna();
     }
 
-    public void risolvi() throws ExpressionException {
+    public void risolvi(){
         String s = "";
         for(int i = 0; i < dati.size(); i++){
             s += dati.get(i);
         }
         Espressione e = new Espressione(s);
-        operazione.setText(e.risultato().toString());
-        dati.clear();
-        dati.add(operazione.getText());
+        try{
+            operazione.setText(e.risultato().toString());
+            dati.clear();
+            dati.add(operazione.getText());
+        }catch(ExpressionException|ArithmeticException ex){
+            operazione.setText(ex.getMessage());
+        }
     }
 
     public void indietro(){
@@ -104,6 +108,7 @@ public class MainController {
 
     public void tastiera(KeyEvent keyEvent) throws ExpressionException {
         KeyCode c = keyEvent.getCode();
+        System.out.println(c);
 
         if(keyEvent.isShiftDown() && c == KeyCode.DIGIT7){
             dati.add(Operatore.DIV.toString());
@@ -136,19 +141,19 @@ public class MainController {
         }
 
         switch(c){
-            case DIGIT0, DIGIT1, DIGIT2, DIGIT3, DIGIT4, DIGIT5, DIGIT6, DIGIT7, DIGIT8, DIGIT9:
+            case DIGIT0, DIGIT1, DIGIT2, DIGIT3, DIGIT4, DIGIT5, DIGIT6, DIGIT7, DIGIT8, DIGIT9, NUMPAD0, NUMPAD1, NUMPAD2, NUMPAD3, NUMPAD4, NUMPAD5, NUMPAD6, NUMPAD7, NUMPAD9, NUMPAD8:
                 dati.add(keyEvent.getText());
                 aggiorna();
                 break;
-            case MINUS:
+            case MINUS, SUBTRACT:
                 dati.add(Operatore.SUB.toString());
                 aggiorna();
                 break;
-            case PLUS:
+            case PLUS, ADD:
                 dati.add(Operatore.ADD.toString());
                 aggiorna();
                 break;
-            case BACK_SPACE:
+            case BACK_SPACE, DELETE:
                 indietro();
                 break;
             default:
