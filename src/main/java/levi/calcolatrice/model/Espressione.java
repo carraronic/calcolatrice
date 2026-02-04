@@ -128,9 +128,11 @@ public class Espressione {
                         }
                         stato = 1;
                     } else if (token instanceof Parentesi) {
+                        operatoreUsato = false;
                         if(token.equals(Parentesi.PARENTESI_CHIUSA)){
-                            operatoreUsato = false;
                             throw new ExpressionException("Espressione non valida");
+                        }else{
+                            validTokensList.add(token);
                         }
                     } else if (token instanceof Frazione) {
                         operatoreUsato = false;
@@ -155,8 +157,8 @@ public class Espressione {
                         stato = 2;
                         operatoreUsato = false;
                     } else if (token instanceof Parentesi) {
+                        operatoreUsato = false;
                         if(token.equals(Parentesi.PARENTESI_CHIUSA)){
-                            operatoreUsato = false;
                             throw new ExpressionException("Espressione non valida");
                         }
                         validTokensList.add(token);
@@ -193,6 +195,8 @@ public class Espressione {
         //non deve terminare con un operatoreUsato (stato 1)
         if (stato == 1)
             throw new ExpressionException("Espressione non valida");
+
+        System.out.println(validTokensList);
     }
 
     public void shuntingYards() throws ExpressionException {
