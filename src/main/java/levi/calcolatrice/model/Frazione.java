@@ -33,7 +33,8 @@ public class Frazione {
         if(denominatore == 1){
             return Long.toString(numeratore);
         }
-        return "(" + numeratore + "/" + denominatore + ")";
+        //return "(" + numeratore + "/" + denominatore + ")";
+        return Double.toString((double) numeratore /denominatore);
     }
 
     private static long massimoComuneDivisore(long a1, long b1){
