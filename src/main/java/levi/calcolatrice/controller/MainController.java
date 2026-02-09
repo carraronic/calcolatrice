@@ -44,11 +44,16 @@ public class MainController {
         operazione.setText("");
         back.setDisable(true);
         risultato = null;
+        conv.setDisable(true);
     }
 
     public void modifica(ActionEvent actionEvent) throws ExpressionException {
         String n = ((Button)actionEvent.getSource()).getText();
         System.out.println(n);
+
+        if(!n.equals("S<=>D")){
+            conv.setDisable(true);
+        }
 
         switch(dati.getLast()){
             case "+", "-", "*", "/", "", "^", "(":
@@ -59,7 +64,7 @@ public class MainController {
                 break;
             case "=":
                 risolvi();
-            case "converti risultato":
+            case "S<=>D":
                 converti();
                 break;
             default:
@@ -83,6 +88,7 @@ public class MainController {
         }catch(ExpressionException|ArithmeticException ex){
             operazione.setText(ex.getMessage());
         }
+        conv.setDisable(false);
     }
 
     public void converti(){
