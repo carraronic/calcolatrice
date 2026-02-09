@@ -73,7 +73,7 @@ public class MainController {
         for(int i = 0; i < dati.size(); i++){
             s += dati.get(i);
         }
-        Espressione e = new Espressione(s);
+        Espressione e = new Espressione("((3/2-1/3)^2/(2-1/2^2)^2*(1/3-1/2^2))/(2/3)^3");
         try{
             risultato = e.risultato();
             operazione.setText(risultato.toString());

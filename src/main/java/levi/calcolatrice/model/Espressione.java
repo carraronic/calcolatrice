@@ -188,7 +188,12 @@ public class Espressione {
                     } else if (token instanceof Frazione) {
                         throw new ExpressionException("Espressione non valida");
                     } else if (token instanceof Parentesi) {
-                        throw new ExpressionException("Espressione non valida");
+                        if(token.equals(Parentesi.PARENTESI_APERTA)){
+                            validTokensList.add(Operatore.MULT);
+                            stato = 0;
+                        }
+                        validTokensList.add(token);
+                        //throw new ExpressionException("Espressione non valida");
                     }
             }
         }
