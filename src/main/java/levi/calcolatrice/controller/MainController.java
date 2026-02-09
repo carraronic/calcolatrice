@@ -56,12 +56,6 @@ public class MainController {
         }
 
         switch(dati.getLast()){
-            case "+", "-", "*", "/", "", "^", "(":
-                if(n.equals("+") || n.equals("-") || n.equals("*") || n.equals("/") || n.equals("^")){
-                    break;
-                }
-                dati.add(n);
-                break;
             case "=":
                 risolvi();
             case "S<=>D":

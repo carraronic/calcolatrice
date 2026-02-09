@@ -42,7 +42,7 @@ public class Frazione {
         if(dec){
             return Double.toString((double) numeratore / denominatore);
         }
-        return "(" + numeratore + "/" + denominatore + ")";
+        return numeratore + "/" + denominatore;
     }
 
     private static long massimoComuneDivisore(long a1, long b1){

@@ -111,7 +111,7 @@ public class Espressione {
                     /*-- stato 0 ----- in attesa di espressione -------------------------------*/
                     if (token instanceof Operatore) {
                         if (operatoreUsato){
-                            throw new ExpressionException("espressione non valida");
+                            throw new ExpressionException("Espressione non valida");
                         }
                         switch ((Operatore)token){
                             case ADD:
@@ -123,7 +123,7 @@ public class Espressione {
                                 validTokensList.add(Operatore.MULT);
                                 break;
                             default:
-                                throw new ExpressionException("espressione non valida");
+                                throw new ExpressionException("Espressione non valida");
 
                         }
                         stato = 1;
@@ -251,7 +251,7 @@ public class Espressione {
                         case POW -> output.push(n1.pow(n2));
                     }
                 }catch (EmptyStackException e){
-                    throw new ExpressionException("syntax error");
+                    throw new ExpressionException("Syntax error");
                 }
             }
         }
