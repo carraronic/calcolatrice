@@ -55,5 +55,10 @@
             <Button fx:id="addiz" maxHeight="Infinity" maxWidth="Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#modifica" text="+" HBox.hgrow="ALWAYS" />
          </children>
       </HBox>
+      <HBox alignment="CENTER" layoutX="30.0" layoutY="609.0" spacing="10.0">
+         <children>
+            <Button fx:id="conv" maxHeight="Infinity" maxWidth="Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#converti" text="converti risultato" HBox.hgrow="ALWAYS" />
+         </children>
+      </HBox>
    </children>
 </VBox>

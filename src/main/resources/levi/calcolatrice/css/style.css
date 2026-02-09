@@ -61,15 +61,15 @@
     -fx-scale-y: 0.95;
 }
 
-#addiz, #sott, #molt, #div, #pAperta, #pChiusa, #clearBtn, #back, #eq, #pow{
+#addiz, #sott, #molt, #div, #pAperta, #pChiusa, #clearBtn, #back, #eq, #pow, #conv{
     -fx-background-radius: 20;
     -fx-border-radius: 20;
 }
 
-#addiz, #sott, #molt, #div, #pAperta, #pChiusa, #pow{
+#addiz, #sott, #molt, #div, #pAperta, #pChiusa, #pow, #conv{
     -fx-background-color: #D9B8FF;
 }
-#addiz:hover, #sott:hover, #molt:hover, #div:hover, #pAperta:hover, #pChiusa:hover, #pow:hover{
+#addiz:hover, #sott:hover, #molt:hover, #div:hover, #pAperta:hover, #pChiusa:hover, #pow:hover, #conv:hover{
     -fx-background-color: #C06BFF;
 }
 

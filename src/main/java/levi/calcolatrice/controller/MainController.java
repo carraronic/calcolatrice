@@ -7,10 +7,7 @@ import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.VBox;
-import levi.calcolatrice.model.Espressione;
-import levi.calcolatrice.model.ExpressionException;
-import levi.calcolatrice.model.Operatore;
-import levi.calcolatrice.model.Parentesi;
+import levi.calcolatrice.model.*;
 
 import java.util.ArrayList;
 
@@ -37,17 +34,21 @@ public class MainController {
     public Button clearBtn;
     public Button pow;
     public VBox calcolatrice;
+    public Button conv;
 
     private ArrayList<String> dati = new ArrayList<>();
+    Frazione risultato;
 
     public void initialize(){
         dati.add("");
         operazione.setText("");
         back.setDisable(true);
+        risultato = null;
     }
 
     public void modifica(ActionEvent actionEvent) throws ExpressionException {
         String n = ((Button)actionEvent.getSource()).getText();
+        System.out.println(n);
 
         switch(dati.getLast()){
             case "+", "-", "*", "/", "", "^", "(":
@@ -58,6 +59,9 @@ public class MainController {
                 break;
             case "=":
                 risolvi();
+            case "converti risultato":
+                converti();
+                break;
             default:
                 dati.add(n);
                 break;
@@ -72,12 +76,18 @@ public class MainController {
         }
         Espressione e = new Espressione(s);
         try{
-            operazione.setText(e.risultato().toString());
+            risultato = e.risultato();
+            operazione.setText(risultato.toString());
             dati.clear();
             dati.add(operazione.getText());
         }catch(ExpressionException|ArithmeticException ex){
             operazione.setText(ex.getMessage());
         }
+    }
+
+    public void converti(){
+        Frazione.cambiaRisultato();
+        operazione.setText(risultato.toString());
     }
 
     public void indietro(){

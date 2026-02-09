@@ -9,6 +9,7 @@ package levi.calcolatrice.model;
 public class Frazione {
     private long numeratore;
     private long denominatore;
+    static boolean dec = false;
 
     public Frazione(long numeratore, long denominatore) throws ArithmeticException{
         if(denominatore == 0){
@@ -26,15 +27,22 @@ public class Frazione {
             this.numeratore = numeratore / mcd;
             this.denominatore = denominatore / mcd;
         }
-
+        dec = false;
     }
+
+    public static void cambiaRisultato() {
+        dec = !dec;
+    }
+
     @Override
     public String toString(){
         if(denominatore == 1){
             return Long.toString(numeratore);
         }
-        //return "(" + numeratore + "/" + denominatore + ")";
-        return Double.toString((double) numeratore /denominatore);
+        if(dec){
+            return Double.toString((double) numeratore / denominatore);
+        }
+        return "(" + numeratore + "/" + denominatore + ")";
     }
 
     private static long massimoComuneDivisore(long a1, long b1){
