@@ -52,7 +52,7 @@
       </HBox>
       <HBox alignment="CENTER" spacing="10.0" VBox.vgrow="ALWAYS">
          <children>
-            <Button fx:id="pow" layoutX="10.0" layoutY="10.0" maxHeight="Infinity" maxWidth="Infinity" minHeight="-Infinity" minWidth="-Infinity" text="^" />
+            <Button fx:id="pow" layoutX="10.0" layoutY="10.0" maxHeight="Infinity" maxWidth="Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#modifica" text="^" />
             <Button fx:id="b0" maxHeight="Infinity" maxWidth="Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#modifica" text="0" HBox.hgrow="ALWAYS" />
             <Button fx:id="eq" maxHeight="Infinity" maxWidth="Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#risolvi" text="=" HBox.hgrow="ALWAYS" />
             <Button fx:id="addiz" maxHeight="Infinity" maxWidth="Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#modifica" text="+" HBox.hgrow="ALWAYS" />

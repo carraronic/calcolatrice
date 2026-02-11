@@ -73,7 +73,8 @@ public class MainController {
         for(int i = 0; i < dati.size(); i++){
             s += dati.get(i);
         }
-        Espressione e = new Espressione("((3/2-1/3)^2/(2-1/2^2)^2*(1/3-1/2^2))/(2/3)^3");
+        //Espressione e = new Espressione("((3/2-1/3)^2/(2-1/2^2)^2*(1/3-1/2^2))/(2/3)^3");
+        Espressione e = new Espressione(s);
         try{
             risultato = e.risultato();
             operazione.setText(risultato.toString());
@@ -92,6 +93,7 @@ public class MainController {
 
     public void indietro(){
         dati.removeLast();
+        conv.setDisable(true);
         aggiorna();
     }
 
@@ -99,6 +101,7 @@ public class MainController {
         dati.clear();
         dati.add("");
         operazione.setText("");
+        conv.setDisable(true);
         aggiorna();
     }
 
